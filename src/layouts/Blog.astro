@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets'
+import App from '../components/App.astro'
+
+type Props = {
+  name: string
+  title: string
+  description: string
+  image: ImageMetadata
+}
+
+const { name, title, description, image } = Astro.props
+---
+
+<App title={title} description={description}>
+  <div class="min-h-screen">
+    <header class="mx-auto px-4 py-8">
+      <div class="mx-auto max-w-5xl">
+        <h1
+          style={{ viewTransitionName: 'title-' + name }}
+          class="text-3xl leading-tight font-bold md:text-5xl"
+        >
+          {title}
+        </h1>
+      </div>
+    </header>
+
+    <div class="mx-auto mb-12 px-4">
+      <div class="mx-auto max-w-5xl">
+        {
+          (
+            <Image
+              style={{ viewTransitionName: name }}
+              loading="eager"
+              src={image}
+              alt=""
+              class="rounded-lg object-cover"
+            />
+          )
+        }
+      </div>
+    </div>
+
+    <article class="mx-auto mb-16 px-4">
+      <div class="mx-auto max-w-5xl">
+        <div
+          class="prose prose-lg max-w-none text-justify [&>p:has(img)]:-mb-4 [&>p>img]:mx-auto [&>p>img]:-mb-4 [&>p>img]:rounded-lg"
+        >
+          <slot />
+        </div>
+      </div>
+    </article>
+  </div>
+</App>

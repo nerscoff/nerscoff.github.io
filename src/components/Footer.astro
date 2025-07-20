@@ -1,0 +1,86 @@
+---
+import { Image } from 'astro:assets'
+import logo from '../assets/logo.jpg'
+import Instagram from '../assets/instagram.svg'
+import Tiktok from '../assets/tiktok.svg'
+import Shopee from '../assets/shopee.svg'
+
+const today = new Date()
+---
+
+<footer class="border-t bg-slate-50 p-4">
+  <div class="mx-auto max-w-5xl py-12">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+      <div class="col-span-2 grid space-y-6">
+        <div class="flex items-center gap-4">
+          <Image src={logo} alt="Logo Nerscoff Coffee" class="h-16 w-16 rounded-full" />
+          <span class="text-2xl font-bold">Nerscoff Coffee</span>
+        </div>
+
+        <a
+          href="https://maps.app.goo.gl/iPPPxDZgs22QtVa88"
+          target="_blank"
+          rel="noopener"
+          class="text-muted-foreground transition-colors hover:text-blue-700"
+        >
+          Jl. Gundih IV No.63, Gundih, Kec. Bubutan, Surabaya, Jawa Timur 60172
+        </a>
+
+        <a href="/about" class="text-muted-foreground transition-colors hover:text-blue-700">
+          Tentang kami
+        </a>
+      </div>
+
+      <div class="text-right">
+        <h3 class="mb-4 font-semibold">Hubungi Kami</h3>
+        <ul class="space-y-2">
+          <li>
+            <a
+              href="https://www.instagram.com/nerscoff.id/"
+              target="_blank"
+              rel="noopener"
+              class="text-muted-foreground hover:text-blue-700"
+            >
+              <span class="inline-flex items-center gap-2 [&_*]:transition-colors">
+                <Instagram />
+                <span>Instagram</span>
+              </span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="https://vt.tiktok.com/ZSBWTRkRn"
+              target="_blank"
+              rel="noopener"
+              class="text-muted-foreground hover:text-blue-700"
+            >
+              <span class="inline-flex items-center gap-2 [&_*]:transition-colors">
+                <Tiktok />
+                <span>Tiktok Shop</span>
+              </span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="https://id.shp.ee/Uaz1Wbe"
+              target="_blank"
+              rel="noopener"
+              class="text-muted-foreground fill-co hover:text-blue-700"
+            >
+              <span class="inline-flex items-center gap-2 [&_*]:transition-colors">
+                <Shopee />
+                <span>Shopee</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="text-muted-foreground mt-12 border-t pt-8 text-center">
+      <p>&copy; {today.getFullYear()} Nerscoff Coffee</p>
+    </div>
+  </div>
+</footer>

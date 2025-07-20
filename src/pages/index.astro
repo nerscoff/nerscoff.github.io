@@ -1,0 +1,103 @@
+---
+import App from '../components/App.astro'
+import Card from '@/components/Card'
+import { Carousel } from '@/components/Carousel'
+
+const wrap = (o: Record<string, string>) => {
+  return Object.keys(o).sort((a, b) => parseInt(a) - parseInt(b))
+}
+const wrapTitle = (o: Record<string, string>) => {
+  return Object.fromEntries(
+    wrap(o).map(image => {
+      let fileName = image.split('/').at(-1)!
+      const int = parseInt(fileName)
+      fileName = fileName.substring(isFinite(int) ? String(int).length + 1 : 0)
+      fileName = fileName
+        .split('-')
+        .map(word => {
+          return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        })
+        .join(' ')
+      fileName = fileName.substring(0, fileName.lastIndexOf('.'))
+
+      return [fileName, image]
+    }),
+  )
+}
+
+const galery = wrap(
+  import.meta.glob('/src/assets/galery/*.jpg', { eager: true, query: '?url', import: 'default' }),
+)
+const arabica = wrapTitle(
+  import.meta.glob('/src/assets/arabica/*.jpg', { eager: true, query: '?url', import: 'default' }),
+)
+const bottles = wrapTitle(
+  import.meta.glob('/src/assets/botol/*.jpg', { eager: true, query: '?url', import: 'default' }),
+)
+---
+
+<App title="Nerscoff" description="Nerscoff Coffee">
+  <Carousel client:load images={galery} />
+
+  <div class="m-4 bg-slate-50 py-16 lg:m-0">
+    <div class="mx-auto max-w-5xl">
+      <div class="mb-6">
+        <h2 class="text-center text-3xl font-bold lg:text-start">Our Beans</h2>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-1 lg:grid-cols-2">
+        {
+          Object.entries(arabica).map(([title, image], index, array) => {
+            const isOdd = index % 2 === 0
+            const isLast = index === array.length - 1
+
+            return (
+              <div class={isOdd && isLast ? 'col-span-2 flex' : undefined}>
+                <Card
+                  client:load
+                  title={title}
+                  image={image}
+                  className={
+                    'h-[600px] overflow-hidden rounded-md transition-[shadow_transform] hover:scale-[102%] hover:shadow-lg' +
+                    (isOdd && isLast ? ' mx-auto w-[calc(50%-var(--spacing)*4)]' : '')
+                  }
+                />
+              </div>
+            )
+          })
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="m-4 bg-slate-50 py-16 lg:m-0">
+    <div class="mx-auto max-w-5xl">
+      <div class="mb-6">
+        <h2 class="text-center text-3xl font-bold lg:text-start">Kopi Susu Botolan</h2>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-1 lg:grid-cols-2">
+        {
+          Object.entries(bottles).map(([title, image], index, array) => {
+            const isOdd = index % 2 === 0
+            const isLast = index === array.length - 1
+
+            return (
+              <div class={isOdd && isLast ? 'col-span-2 flex' : undefined}>
+                <Card
+                  client:load
+                  title={title}
+                  image={image}
+                  className={
+                    'h-[600px] overflow-hidden rounded-md transition-[shadow_transform] hover:scale-[102%] hover:shadow-lg' +
+                    (isOdd && isLast ? ' mx-auto w-[calc(50%-var(--spacing)*4)]' : '')
+                  }
+                />
+              </div>
+            )
+          })
+        }
+      </div>
+    </div>
+  </div>
+</App>
