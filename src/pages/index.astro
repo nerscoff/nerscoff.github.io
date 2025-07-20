@@ -2,38 +2,43 @@
 import App from '../components/App.astro'
 import Card from '@/components/Card'
 import { Carousel } from '@/components/Carousel'
+import type { ImageMetadata } from 'astro'
+import { Image } from 'astro:assets'
 
-const wrap = (o: Record<string, string>) => {
-  return Object.keys(o).sort((a, b) => parseInt(a) - parseInt(b))
+const wrap = async (o: Record<string, () => Promise<unknown>>) => {
+  return (
+    (await Promise.all(
+      Object.entries(o)
+        .sort(([a], [b]) => parseInt(a) - parseInt(b))
+        .map(([_, promise]) => promise()),
+    )) as unknown as { default: ImageMetadata }[]
+  ).map(data => data.default)
 }
-const wrapTitle = (o: Record<string, string>) => {
-  return Object.fromEntries(
-    wrap(o).map(image => {
-      let fileName = image.split('/').at(-1)!
-      const int = parseInt(fileName)
-      fileName = fileName.substring(isFinite(int) ? String(int).length + 1 : 0)
-      fileName = fileName
-        .split('-')
-        .map(word => {
-          return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-        })
-        .join(' ')
-      fileName = fileName.substring(0, fileName.lastIndexOf('.'))
 
-      return [fileName, image]
-    }),
+const wrapTitle = (o: Record<string, () => Promise<unknown>>) => {
+  return Object.fromEntries(
+    Object.entries(o)
+      .sort(([a], [b]) => parseInt(a) - parseInt(b))
+      .map(([fileName, image]) => {
+        fileName = fileName.split('/').at(-1)!
+        const int = parseInt(fileName)
+        fileName = fileName.substring(isFinite(int) ? String(int).length + 1 : 0)
+        fileName = fileName
+          .split('-')
+          .map(word => {
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          })
+          .join(' ')
+        fileName = fileName.substring(0, fileName.lastIndexOf('.'))
+
+        return [fileName, image() as unknown as ImageMetadata]
+      }),
   )
 }
 
-const galery = wrap(
-  import.meta.glob('/src/assets/galery/*.jpg', { eager: true, query: '?url', import: 'default' }),
-)
-const arabica = wrapTitle(
-  import.meta.glob('/src/assets/arabica/*.jpg', { eager: true, query: '?url', import: 'default' }),
-)
-const bottles = wrapTitle(
-  import.meta.glob('/src/assets/botol/*.jpg', { eager: true, query: '?url', import: 'default' }),
-)
+const galery = await wrap(import.meta.glob('/src/assets/galery/*.jpg'))
+const arabica = wrapTitle(import.meta.glob('/src/assets/arabica/*.jpg'))
+const bottles = wrapTitle(import.meta.glob('/src/assets/botol/*.jpg'))
 ---
 
 <App title="Nerscoff" description="Nerscoff Coffee">
@@ -56,12 +61,18 @@ const bottles = wrapTitle(
                 <Card
                   client:load
                   title={title}
-                  image={image}
                   className={
                     'h-[600px] overflow-hidden rounded-md transition-[shadow_transform] hover:scale-[102%] hover:shadow-lg' +
                     (isOdd && isLast ? ' mx-auto w-[calc(50%-var(--spacing)*4)]' : '')
                   }
-                />
+                >
+                  <Image
+                    src={image}
+                    loading="lazy"
+                    alt={title}
+                    class="block h-full w-full object-cover"
+                  />
+                </Card>
               </div>
             )
           })
@@ -87,12 +98,18 @@ const bottles = wrapTitle(
                 <Card
                   client:load
                   title={title}
-                  image={image}
                   className={
                     'h-[600px] overflow-hidden rounded-md transition-[shadow_transform] hover:scale-[102%] hover:shadow-lg' +
                     (isOdd && isLast ? ' mx-auto w-[calc(50%-var(--spacing)*4)]' : '')
                   }
-                />
+                >
+                  <Image
+                    src={image}
+                    loading="lazy"
+                    alt={title}
+                    class="block h-full w-full object-cover"
+                  />
+                </Card>
               </div>
             )
           })
