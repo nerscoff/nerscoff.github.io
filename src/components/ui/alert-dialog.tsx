@@ -40,17 +40,17 @@ function AlertDialogContent({
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Content>) {
   const ref = useRef<HTMLDivElement>(null)
+  const close = () => {
+    ref.current?.querySelector<HTMLElement>('[data-slot="alert-dialog-close"]')?.click()
+  }
 
   return (
     <AlertDialogPortal>
-      <AlertDialogOverlay
-        onClick={() => {
-          ref.current?.querySelector<HTMLElement>('[data-slot="alert-dialog-close"]')?.click()
-        }}
-      />
+      <AlertDialogOverlay onClick={close} />
       <AlertDialogPrimitive.Content
         ref={ref}
         data-slot="alert-dialog-content"
+        onClick={close}
         className={cn(
           'fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center',
           className,
