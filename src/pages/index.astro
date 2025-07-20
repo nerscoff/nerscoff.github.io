@@ -44,34 +44,29 @@ const bottles = wrapTitle(import.meta.glob('/src/assets/botol/*.jpg'))
 <App title="Nerscoff" description="Nerscoff Coffee">
   <Carousel client:load images={galery} />
 
-  <div class="m-4 bg-slate-50 py-16 lg:m-0">
+  <div class="bg-slate-50 p-4 py-16 lg:px-0">
     <div class="mx-auto max-w-5xl">
       <div class="mb-6">
         <h2 class="text-center text-3xl font-bold lg:text-start">Our Beans</h2>
       </div>
 
-      <div class="grid gap-8 md:grid-cols-1 lg:grid-cols-2">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {
           Object.entries(arabica).map(([title, image], index, array) => {
             const isOdd = index % 2 === 0
             const isLast = index === array.length - 1
 
             return (
-              <div class={isOdd && isLast ? 'col-span-2 flex' : undefined}>
+              <div class={isOdd && isLast ? 'flex lg:col-span-2' : undefined}>
                 <Card
                   client:load
                   title={title}
                   className={
                     'h-[600px] overflow-hidden rounded-md transition-[shadow_transform] hover:scale-[102%] hover:shadow-lg' +
-                    (isOdd && isLast ? ' mx-auto w-[calc(50%-var(--spacing)*4)]' : '')
+                    (isOdd && isLast ? ' lg:mx-auto lg:w-[calc(50%-var(--spacing)*4)]' : '')
                   }
                 >
-                  <Image
-                    src={image}
-                    loading="lazy"
-                    alt={title}
-                    class="block h-full w-full object-cover"
-                  />
+                  <Image src={image} alt={title} class="block h-full w-full object-cover" />
                 </Card>
               </div>
             )
@@ -81,34 +76,29 @@ const bottles = wrapTitle(import.meta.glob('/src/assets/botol/*.jpg'))
     </div>
   </div>
 
-  <div class="m-4 bg-slate-50 py-16 lg:m-0">
+  <div class="bg-slate-50 p-4 py-16 lg:px-0">
     <div class="mx-auto max-w-5xl">
       <div class="mb-6">
         <h2 class="text-center text-3xl font-bold lg:text-start">Kopi Susu Botolan</h2>
       </div>
 
-      <div class="grid gap-8 md:grid-cols-1 lg:grid-cols-2">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {
           Object.entries(bottles).map(([title, image], index, array) => {
             const isOdd = index % 2 === 0
             const isLast = index === array.length - 1
 
             return (
-              <div class={isOdd && isLast ? 'col-span-2 flex' : undefined}>
+              <div class={isOdd && isLast ? 'flex lg:col-span-2' : undefined}>
                 <Card
                   client:load
                   title={title}
                   className={
                     'h-[600px] overflow-hidden rounded-md transition-[shadow_transform] hover:scale-[102%] hover:shadow-lg' +
-                    (isOdd && isLast ? ' mx-auto w-[calc(50%-var(--spacing)*4)]' : '')
+                    (isOdd && isLast ? ' lg:mx-auto lg:w-[calc(50%-var(--spacing)*4)]' : '')
                   }
                 >
-                  <Image
-                    src={image}
-                    loading="lazy"
-                    alt={title}
-                    class="block h-full w-full object-cover"
-                  />
+                  <Image src={image} alt={title} class="block h-full w-full object-cover" />
                 </Card>
               </div>
             )
